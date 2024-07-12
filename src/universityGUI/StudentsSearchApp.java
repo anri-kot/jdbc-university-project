@@ -11,6 +11,7 @@ import universityDAO.StudentsDAO;
 
 public class StudentsSearchApp extends JFrame {
     private StudentsDAO dao;
+    JTable table;
 
     // launch app
     public static void main(String[] args) {
@@ -65,7 +66,7 @@ public class StudentsSearchApp extends JFrame {
         topSrcPanel.add(searchTextField);
 
         // table
-        JTable table = new JTable();
+        table = new JTable();
 
         // top panel search button
         JButton searchButton = new JButton("Search");
@@ -104,12 +105,41 @@ public class StudentsSearchApp extends JFrame {
         });
         topSrcPanel.add(searchButton);
 
+        // -- bottom panel --
+
+        // add button
+        JButton addStdButton = new JButton("Register Student");
+        addStdButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // pop dialog
+                AddStudentDialog dialog = new AddStudentDialog(StudentsSearchApp.this, dao);
+                dialog.setVisible(true);
+            }
+        });
+
+        JPanel bttnPanel = new JPanel();
+        bttnPanel.add(addStdButton);
+
         // ---- add frame objects ----
 
-        add(mainPanel); // objects container
         mainPanel.add(topSrcPanel, BorderLayout.NORTH);
         mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+        mainPanel.add(bttnPanel, BorderLayout.SOUTH);
+        add(mainPanel); // objects container
 
+    }
+
+    public void refreshStudentList() {
+        try {
+            List<Students> students = dao.getAllStudents();
+
+            // create model and update list
+            StudentsTableModel model = new StudentsTableModel(students);
+
+            table.setModel(model);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e, "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 }
