@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import universityCore.Students;
 
 public class StudentsDAO {
@@ -72,6 +74,32 @@ public class StudentsDAO {
         }
     }
 
+    // Return students by id
+    public List<Students> searchStudentsId(String matr) throws Exception {
+        List<Students> list = new ArrayList<>();
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        // execute query
+        try {
+            // sql statement
+            st = con.prepareStatement("select * from students where st_matr = ?");
+
+            st.setString(1, matr);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+                Students tempStudents = rowToStudent(rs);
+                list.add(tempStudents);
+            }
+            return list;
+
+        } finally {
+            close(st, rs);
+        }
+    }
+
     // Add new student
     public void AddStudent(Students theStudents) throws Exception {
         PreparedStatement st = null;
@@ -88,10 +116,58 @@ public class StudentsDAO {
 
             // execute insert/update
             st.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Student registered sucessfully.",
+                    "Student registered", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
-            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Error",
+                    "ERROR: " + e, JOptionPane.ERROR_MESSAGE);
             st.close();
         }
+    }
+
+    // Update student
+    public void UpdateStudent(Students theStudents) throws Exception {
+        PreparedStatement st = null;
+        try {
+            // sql statement
+            st = con.prepareStatement(
+                    "update students set st_name = ?, st_address = ?, st_phone = ?, st_ssn = ? where st_matr = ?");
+
+            // set parameters
+            st.setString(1, theStudents.getName());
+            st.setString(2, theStudents.getAddress());
+            st.setString(3, theStudents.getPhone());
+            st.setString(4, theStudents.getSsn());
+            st.setInt(5, theStudents.getMatr());
+
+            // execute insert/update
+            st.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Student updated sucessfully.",
+                    "Student updated", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error",
+                    "ERROR: " + e, JOptionPane.ERROR_MESSAGE);
+            st.close();
+        }
+    }
+
+    // delete student
+    public void DeleteStudent(int matr) throws Exception {
+        PreparedStatement st = null;
+        try {
+            // sql statement
+            st = con.prepareStatement("delete from students where st_matr = ?");
+            st.setInt(1, matr);
+
+            // execute query
+            st.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Student deleted sucessfully.",
+                    "Student deleted", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error" + e,
+                    "ERROR: ", JOptionPane.ERROR_MESSAGE);
+        }
+        st.close();
     }
 
     // close statement helper method

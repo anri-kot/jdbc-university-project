@@ -20,8 +20,8 @@ public class StudentsSearchApp extends JFrame {
                 try {
                     StudentsSearchApp stdSearch = new StudentsSearchApp();
                     stdSearch.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exc) {
+                    exc.printStackTrace();
                 }
             }
         });
@@ -112,13 +112,78 @@ public class StudentsSearchApp extends JFrame {
         addStdButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // pop dialog
-                AddStudentDialog dialog = new AddStudentDialog(StudentsSearchApp.this, dao);
+                StudentDialog dialog = new StudentDialog(StudentsSearchApp.this, dao, null, false);
                 dialog.setVisible(true);
+            }
+        });
+
+        // update button
+        JButton updStdButton = new JButton("Update Student");
+        updStdButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // get selected row
+                int row = table.getSelectedRow();
+
+                // check if row is selected
+                if (row <= 0) {
+                    JOptionPane.showMessageDialog(StudentsSearchApp.this, "Select a row to update", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // get data from selected row
+                Students tempStudents = (Students) table.getValueAt(row, StudentsTableModel.OBJECT_COL);
+
+                // pop update window
+                StudentDialog dialog = new StudentDialog(StudentsSearchApp.this, dao, tempStudents, true);
+                dialog.setVisible(true);
+
+            }
+        });
+
+        // delete button
+        JButton delButton = new JButton("Delete student");
+        delButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    // get selected row
+                    int row = table.getSelectedRow();
+
+                    // check if row is selected
+                    if (row <= 0) {
+                        JOptionPane.showMessageDialog(StudentsSearchApp.this, "Select a row to delete", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // get data from selected row
+                    Students tempStudents = (Students) table.getValueAt(row, StudentsTableModel.OBJECT_COL);
+
+                    // promp confirm window
+                    int confirm = JOptionPane.showConfirmDialog(StudentsSearchApp.this,
+                            "Are you sure you want to delete", getTitle(),
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (confirm != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+
+                    // send student id to DAO for deletion
+                    dao.DeleteStudent(tempStudents.getMatr());
+
+                    // refresh list
+                    refreshStudentList();
+
+                } catch (Exception exc) {
+                    JOptionPane.showMessageDialog(StudentsSearchApp.this, "Error: " + exc, "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
         JPanel bttnPanel = new JPanel();
         bttnPanel.add(addStdButton);
+        bttnPanel.add(updStdButton);
+        bttnPanel.add(delButton);
 
         // ---- add frame objects ----
 
@@ -137,8 +202,8 @@ public class StudentsSearchApp extends JFrame {
             StudentsTableModel model = new StudentsTableModel(students);
 
             table.setModel(model);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e, "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception exc) {
+            JOptionPane.showMessageDialog(this, "Error: " + exc, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
