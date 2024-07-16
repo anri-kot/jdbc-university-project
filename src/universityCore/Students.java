@@ -2,6 +2,10 @@ package universityCore;
 
 public class Students extends People {
 
+    public Students(){ // empty constructor for building generic objects
+        super();
+    }
+
     public Students(int matr, String name, String address, String phone, String ssn) {
         super(matr, name, address, phone, ssn);
     }

@@ -10,41 +10,44 @@ import java.sql.SQLException;
 
 public class ConnectionManager {
 
-    protected static ConnectionManager connect;
+    protected static ConnectionManager connect; // receives the connection
 
+    // variables to assign properties to
+    protected static String user;
+    protected static String password;
+    protected static String dburl;
+    protected static String driver;
+
+    // starts connection if not started
     public static ConnectionManager getInstance() {
-
         if (connect == null) {
-
             return connect = new ConnectionManager();
-
         } else {
-
             return connect;
-
         }
 
     }
 
+    // effectively starts connection
     public static Connection getConnection()
-            throws ClassNotFoundException, SQLException, FileNotFoundException, IOException {
-        // get db properties
-        Properties prop = new Properties();
+            throws ClassNotFoundException, FileNotFoundException, SQLException, IOException {
+        Properties prop = new Properties(); // receives properties from .properties file
         prop.load(new FileInputStream("prop.properties"));
 
-        String user = prop.getProperty("user");
-        String password = prop.getProperty("password");
-        String dburl = prop.getProperty("dburl");
-        String driver = prop.getProperty("driver");
+        // assigning properties to variables
+        user = prop.getProperty("user");
+        password = prop.getProperty("password");
+        dburl = prop.getProperty("dburl");
+        driver = prop.getProperty("driver");
 
         Class.forName(driver);
-
         return DriverManager.getConnection(dburl, user, password);
-
     }
 
     public static void main(String[] args)
             throws ClassNotFoundException, FileNotFoundException, SQLException, IOException {
-        System.out.println(ConnectionManager.getConnection());
+        Connection con;
+        con = ConnectionManager.getConnection();
+        System.out.println(con);
     }
 }

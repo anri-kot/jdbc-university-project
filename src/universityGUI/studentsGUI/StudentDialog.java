@@ -1,4 +1,4 @@
-package universityGUI;
+package universityGUI.studentsGUI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,17 +12,17 @@ import universityDAO.StudentsDAO;
 public class StudentDialog extends JDialog {
 
     private StudentsDAO stdDAO;
-    private StudentsSearchApp stdSearchApp;
+    private StudentsMainFrame stdSearchApp;
     private Students previousStudents;
     // text fields
     private JTextField tfName, tfAddress, tfPhone, tfSsn;
     private boolean updateMode;
 
-    // Constructor that will be used for the AddStudentDialog
-    public StudentDialog(StudentsSearchApp theStdSearchApp, StudentsDAO theStdDAO, Students thePreviousStudents,
+    // Constructor that will be used for the addStudentDialog
+    public StudentDialog(StudentsMainFrame theMainFrame, StudentsDAO theStdDAO, Students thePreviousStudents,
             boolean theUpdateMode) {
         this();
-        stdSearchApp = theStdSearchApp;
+        stdSearchApp = theMainFrame;
         stdDAO = theStdDAO;
         previousStudents = thePreviousStudents;
         updateMode = theUpdateMode;
@@ -37,6 +37,7 @@ public class StudentDialog extends JDialog {
         // ---- properties ----
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setLocation(400, 100);
         setMinimumSize(new Dimension(500, 350));
         setResizable(false);
         setTitle("Register student");
@@ -133,9 +134,9 @@ public class StudentDialog extends JDialog {
             try {
                 // send tempStudents object info to be added
                 if (updateMode) {
-                    stdDAO.UpdateStudent(tempStudents);
+                    stdDAO.updateStudent(tempStudents);
                 } else {
-                    stdDAO.AddStudent(tempStudents);
+                    stdDAO.addStudent(tempStudents);
                 }
 
                 // close window

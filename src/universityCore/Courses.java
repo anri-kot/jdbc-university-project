@@ -5,10 +5,19 @@ public class Courses {
     String c_name;
     int c_duration;
 
+    public Courses() {
+    } // used for constructing generic course objects
+
     public Courses(int idCourse, String c_name, int c_duration) {
         this.idCourse = idCourse;
         this.c_name = c_name;
         this.c_duration = c_duration;
+    }
+
+    public String toString() {
+        return "[idCourse=" + getIdCourse() +
+                ",c_name=" + getC_name() +
+                ",c_duration=" + getC_duration() + "]";
     }
 
     public int getIdCourse() {

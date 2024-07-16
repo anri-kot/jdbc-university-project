@@ -1,10 +1,10 @@
 package universityCore;
 
 public class Grades {
-    int idGrade;
-    double grade;
-    Students students;
-    Classes classes;
+    private int idGrade;
+    private double grade;
+    private Students students;
+    private Classes classes;
 
     public Grades(int idGrade, double grade, Students students, Classes classes) {
         this.idGrade = idGrade;

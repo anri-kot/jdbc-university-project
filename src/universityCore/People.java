@@ -15,6 +15,11 @@ public abstract class People {
         this.ssn = ssn;
     }
 
+    public People() { // empty constructor for building generic objects
+    }
+
+    public abstract String toString();
+
     public int getMatr() {
         return matr;
     }

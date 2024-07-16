@@ -1,4 +1,4 @@
-package universityGUI;
+package universityGUI.studentsGUI;
 
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -10,7 +10,7 @@ public class StudentsTableModel extends AbstractTableModel {
     private final static int ST_ADDRESS_COL = 2;
     private final static int ST_PHONE_COL = 3;
     private final static int ST_SSN_COL = 4;
-    protected final static int OBJECT_COL = -1;
+    protected final static int OBJECT_COL = -1; // will be used to return the default object
 
     private String[] columnNames = { "ID", "Name", "Address", "Phone", "SSN" };
     private List<Students> students;
@@ -52,9 +52,5 @@ public class StudentsTableModel extends AbstractTableModel {
             default:
                 return tempStudents;
         }
-    }
-
-    public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
     }
 }

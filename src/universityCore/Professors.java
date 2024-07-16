@@ -1,13 +1,19 @@
 package universityCore;
 
 public class Professors extends People {
-    double salary;
-    Courses courses;
+    private double salary;
+    private Courses course;
 
-    public Professors(int matr, String name, String address, String phone, String ssn, double salary, Courses courses) {
+    public Professors(int matr, String name, String address, String phone, String ssn, double salary, Courses course) {
         super(matr, name, address, phone, ssn);
         this.salary = salary;
-        this.courses = courses;
+        this.course = course;
+    }
+
+    public String toString() {
+        return "professorId=" + getMatr() + ", name=" + getName() +
+                ", address=" + getAddress() + ", phone=" + getPhone() + ", ssn=" + getSsn() +
+                ", salary=" + getSalary() + ", courseId=" + getCourse().getIdCourse();
     }
 
     public double getSalary() {
@@ -18,11 +24,11 @@ public class Professors extends People {
         this.salary = salary;
     }
 
-    public Courses getCourses() {
-        return courses;
+    public Courses getCourse() {
+        return course;
     }
 
-    public void setCourses(Courses courses) {
-        this.courses = courses;
+    public void setCourse(Courses course) {
+        this.course = course;
     }
 }

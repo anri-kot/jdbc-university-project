@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import universityCore.Students;
 
 public class StudentsDAO {
@@ -75,7 +73,7 @@ public class StudentsDAO {
     }
 
     // Return students by id
-    public List<Students> searchStudentsId(String matr) throws Exception {
+    public List<Students> searchStudentsId(int matr) throws Exception {
         List<Students> list = new ArrayList<>();
 
         PreparedStatement st = null;
@@ -86,7 +84,7 @@ public class StudentsDAO {
             // sql statement
             st = con.prepareStatement("select * from students where st_matr = ?");
 
-            st.setString(1, matr);
+            st.setInt(1, matr);
             rs = st.executeQuery();
 
             while (rs.next()) {
@@ -101,7 +99,7 @@ public class StudentsDAO {
     }
 
     // Add new student
-    public void AddStudent(Students theStudents) throws Exception {
+    public void addStudent(Students theStudents) throws Exception {
         PreparedStatement st = null;
         try {
             // sql statement
@@ -121,12 +119,12 @@ public class StudentsDAO {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error",
                     "ERROR: " + e, JOptionPane.ERROR_MESSAGE);
-            st.close();
         }
+        st.close();
     }
 
     // Update student
-    public void UpdateStudent(Students theStudents) throws Exception {
+    public void updateStudent(Students theStudents) throws Exception {
         PreparedStatement st = null;
         try {
             // sql statement
@@ -147,12 +145,12 @@ public class StudentsDAO {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error",
                     "ERROR: " + e, JOptionPane.ERROR_MESSAGE);
-            st.close();
         }
+        st.close();
     }
 
     // delete student
-    public void DeleteStudent(int matr) throws Exception {
+    public void deleteStudent(int matr) throws Exception {
         PreparedStatement st = null;
         try {
             // sql statement

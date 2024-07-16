@@ -13,6 +13,13 @@ public class Enrollments {
         this.classes = classes;
     }
 
+    public String toString() {
+        return "\n[idEnrollment=" + getIdEnrollment() +
+            ", en_year=" + getEn_year() +
+            ", studentId=" + getStudents().getMatr() +
+            ", idClass=" + getClasses().getIdClass() + "]";
+    }
+
     public int getIdEnrollment() {
         return idEnrollment;
     }
