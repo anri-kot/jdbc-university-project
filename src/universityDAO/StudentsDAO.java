@@ -17,7 +17,6 @@ public class StudentsDAO {
 
         // connection
         con = ConnectionManager.getConnection();
-        System.out.println("Successfully connected to the database");
     }
 
     // ---- SQL OPERATIONS ----

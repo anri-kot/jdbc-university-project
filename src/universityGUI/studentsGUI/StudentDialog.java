@@ -135,13 +135,12 @@ public class StudentDialog extends JDialog {
                 // send tempStudents object info to be added
                 if (updateMode) {
                     stdDAO.updateStudent(tempStudents);
+                    setVisible(false);
+                    dispose();
                 } else {
                     stdDAO.addStudent(tempStudents);
+                    clearFields();
                 }
-
-                // close window
-                setVisible(false);
-                dispose();
 
                 // refresh list
                 stdSearchApp.refreshStudentList();
@@ -164,6 +163,13 @@ public class StudentDialog extends JDialog {
         tfAddress.setText(previousStudents.getAddress());
         tfPhone.setText(previousStudents.getPhone());
         tfSsn.setText(previousStudents.getSsn());
+    }
+
+    public void clearFields() {
+        tfName.setText("");
+        tfAddress.setText("");
+        tfPhone.setText("");
+        tfSsn.setText("");
     }
 
     public boolean checkFields(String name, String address, String phone, String ssn) {

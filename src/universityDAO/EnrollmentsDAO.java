@@ -3,6 +3,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import universityCore.Enrollments;
 import universityCore.Students;
 import universityCore.Classes;
@@ -13,7 +15,6 @@ public class EnrollmentsDAO {
     // Connection
     public EnrollmentsDAO() throws Exception {
         con = ConnectionManager.getConnection(); // establish connection
-        System.out.println("Successfully connected to the database.");
     }
 
     /* ---- SQL Operations ---- */
@@ -88,6 +89,32 @@ public class EnrollmentsDAO {
         }
     }
 
+    // search enrollments with course name
+    public ArrayList<String> searchEnrollmentsJoinCourse(int matr) throws Exception {
+        ArrayList<String> c_name = new ArrayList<>(); // receives the course name
+        // initializing Statements and ResultSet
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            // sql statement
+            st = con.prepareStatement("select courses.c_name from enrollments " +
+                "join classes on enrollments.Classes_idClass = classes.idClass " +
+                "join courses on classes.Courses_idCourse = courses.idCourse " +
+                "where Students_st_matr = ?");
+            st.setInt(1, matr);
+
+            rs = st.executeQuery();
+            // loop for getting rows
+            while (rs.next()) {
+                c_name.add(rs.getString("c_name"));
+            }
+            return c_name;
+        } finally {
+            close(st, rs);
+        }
+    }
+
     // add new enrollment
     public void addEnrollments(Enrollments theEnrollment) throws Exception {
         // initializing statement
@@ -102,7 +129,7 @@ public class EnrollmentsDAO {
             st.setString(3, theEnrollment.getClasses().getIdClass());
 
             st.executeUpdate();
-            System.out.println("Enrollment " + theEnrollment.getIdEnrollment() + " deleted successfully.");
+            JOptionPane.showMessageDialog(null, "Enrollment added successfully.", "Enrollments manager", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception exc) {
             System.out.println(exc);
         }
@@ -124,7 +151,7 @@ public class EnrollmentsDAO {
             st.setInt(4, theEnrollment.getIdEnrollment());
 
             st.executeUpdate();
-            System.out.println("Enrollment " + theEnrollment.getIdEnrollment() + " updated successfully.");
+            JOptionPane.showMessageDialog(null, "Enrollment " + theEnrollment.getIdEnrollment() + " updated successfully.", "Enrollments manager", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception exc) {
             System.out.println(exc);
         }
@@ -138,12 +165,12 @@ public class EnrollmentsDAO {
 
         try {
             // sql statements
-            st = con.prepareStatement("delete enrollments where id = ?");
+            st = con.prepareStatement("delete from enrollments where idEnrollment = ?");
             // setting parameter
             st.setInt(1, id);
 
             st.executeUpdate();
-            System.out.println("Enrollment " + id + " deleted successfully.");
+            JOptionPane.showMessageDialog(null, "Enrollment " + id + " deleted successfully.", "Enrollments manager", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception exc) {
             System.out.println(exc);
         }
@@ -187,6 +214,6 @@ public class EnrollmentsDAO {
         Enrollments en = new Enrollments(11, 2012, std, css);
         dao.updateEnrollments(en);; */
 
-        System.out.println(dao.searchEnrollmentsStId(5));
+        System.out.println(dao.searchEnrollmentsJoinCourse(5));
     }
 }

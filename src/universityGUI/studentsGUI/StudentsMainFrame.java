@@ -102,12 +102,6 @@ public class StudentsMainFrame extends JFrame {
                     StudentsTableModel model = new StudentsTableModel(students);
                     table.setModel(model);
 
-                    /*
-                     * for (Students temp : students) {
-                     * System.out.println(temp);
-                     * }
-                     */
-
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(StudentsMainFrame.this, "Error: " + exc);
                 }

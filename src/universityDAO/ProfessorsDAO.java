@@ -16,7 +16,6 @@ public class ProfessorsDAO {
     public ProfessorsDAO() throws Exception {
         // connection
         con = ConnectionManager.getConnection();
-        System.out.println("Successfully connected to the database");
     }
 
     /* ---- SQL Operations ---- */
