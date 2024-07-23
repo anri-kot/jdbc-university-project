@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import universityCore.Courses;
 import universityCore.Professors;
 
@@ -66,8 +69,32 @@ public class ProfessorsDAO {
         }
     }
 
+    // search professors by name
+    public List<Professors> searchProfessors(String name) throws Exception {
+        List<Professors> list = new ArrayList<>(); // will receibe the professors object
+
+        // initializing statements and resultset
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = con.prepareStatement("select * from professors where pr_name like ?"); // sql statement
+            // setting parameters
+            st.setString(1,"%" + name + "%");
+
+            rs = st.executeQuery();
+            // loop to get all rows from the db
+            while (rs.next()) {
+                Professors tempProfessors = rowToProfessors(rs);
+                list.add(tempProfessors);
+            }
+            return list;
+        } finally {
+            close(st, rs);
+        }
+    }
+
     // add new professor
-    public void addProfessors(Professors theProfessors) throws Exception {
+    public void addProfessors(Professors theProfessors, int userId) throws Exception {
         PreparedStatement st = null;
         try {
             st = con.prepareStatement("insert into professors (pr_name, pr_address, pr_phone, pr_ssn, salary, Courses_idCourse) values (?, ?, ?, ?, ?, ?)");
@@ -81,7 +108,9 @@ public class ProfessorsDAO {
 
             st.executeUpdate(); // execute insert/update
 
-            System.out.println("professor added successfully");
+            JOptionPane.showMessageDialog(null, "Professor added sucessfully.",
+                    "Professor added", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (Exception exc) {
             System.out.println(exc);
         }
@@ -89,7 +118,7 @@ public class ProfessorsDAO {
     }
 
     // update professors
-    public void updateProfessors(Professors theProfessor) throws Exception {
+    public void updateProfessors(Professors theProfessor, int userId) throws Exception {
         // initializing statements
         PreparedStatement st = null;
 
@@ -106,7 +135,9 @@ public class ProfessorsDAO {
             st.setInt(7, theProfessor.getMatr());
 
             st.executeUpdate();
-            System.out.println("Professor " + theProfessor.getName() + " updated successfully.");
+            JOptionPane.showMessageDialog(null, "Student updated sucessfully.",
+                    "Student updated", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (Exception exc) {
             System.out.println(exc);
         }
@@ -120,11 +151,13 @@ public class ProfessorsDAO {
 
         try {
             // sql statement
-            st = con.prepareStatement("delete professors where pr_matr = ?");
+            st = con.prepareStatement("delete from professors where pr_matr = ?");
             st.setInt(1, id); // parameters
 
             st.executeUpdate();
-            System.out.println("Professor " + id + " deleted successfully.");
+            JOptionPane.showMessageDialog(null, "Professor deleted sucessfully.",
+                    "Professor deleted", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (Exception exc) {
             System.out.println(exc);
         }
@@ -167,9 +200,9 @@ public class ProfessorsDAO {
 
     public static void main(String[] args) throws Exception {
         ProfessorsDAO p = new ProfessorsDAO();
-        Courses c = new Courses();
+        /* Courses c = new Courses();
         c.setIdCourse(3);
-        p.updateProfessors(new Professors(4, "Ed Sheeran", "Canada", "77885599441", "77445522115", 5150.50, c));
-        System.out.println(p.getAllProfessors());
+        p.updateProfessors(new Professors(4, "Ed Sheeran", "Canada", "77885599441", "77445522115", 5150.50, c)); */
+        System.out.println(p.searchProfessors("Na"));
     }
 }

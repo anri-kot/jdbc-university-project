@@ -1,13 +1,13 @@
 package universityCore;
 
-public abstract class People {
+public abstract class UniversityEntity {
     private int matr;
     private String name;
     private String address;
     private String phone;
     private String ssn;
 
-    public People(int matr, String name, String address, String phone, String ssn) {
+    public UniversityEntity(int matr, String name, String address, String phone, String ssn) {
         this.matr = matr;
         this.name = name;
         this.address = address;
@@ -15,7 +15,7 @@ public abstract class People {
         this.ssn = ssn;
     }
 
-    public People() { // empty constructor for building generic objects
+    public UniversityEntity() { // empty constructor for building generic objects
     }
 
     public abstract String toString();

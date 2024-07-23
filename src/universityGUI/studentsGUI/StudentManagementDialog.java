@@ -8,24 +8,27 @@ import java.awt.event.ActionListener;
 import java.util.stream.Stream;
 import universityCore.Students;
 import universityDAO.StudentsDAO;
+import universityGUI.StudentFacultyManagementGUI;
 
-public class StudentDialog extends JDialog {
+public class StudentManagementDialog extends JDialog {
 
     private StudentsDAO stdDAO;
-    private StudentsMainFrame stdSearchApp;
+    private StudentFacultyManagementGUI managementMainFrame;
     private Students previousStudents;
+    private int currentUser;
     // text fields
     private JTextField tfName, tfAddress, tfPhone, tfSsn;
     private boolean updateMode;
 
     // Constructor that will be used for the addStudentDialog
-    public StudentDialog(StudentsMainFrame theMainFrame, StudentsDAO theStdDAO, Students thePreviousStudents,
-            boolean theUpdateMode) {
+    public StudentManagementDialog(StudentFacultyManagementGUI theMainFrame, StudentsDAO theStdDAO, Students thePreviousStudents,
+            boolean theUpdateMode, int userId) {
         this();
-        stdSearchApp = theMainFrame;
+        managementMainFrame = theMainFrame;
+        updateMode = theUpdateMode;
         stdDAO = theStdDAO;
         previousStudents = thePreviousStudents;
-        updateMode = theUpdateMode;
+        currentUser = userId;
 
         if (updateMode) {
             setTitle("Update Student");
@@ -33,14 +36,14 @@ public class StudentDialog extends JDialog {
         }
     }
 
-    public StudentDialog() {
+    public StudentManagementDialog() {
         // ---- properties ----
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocation(400, 100);
         setMinimumSize(new Dimension(500, 350));
         setResizable(false);
-        setTitle("Register student");
+        setTitle("Register Student");
 
         // ---- window objects ----
 
@@ -134,19 +137,19 @@ public class StudentDialog extends JDialog {
             try {
                 // send tempStudents object info to be added
                 if (updateMode) {
-                    stdDAO.updateStudent(tempStudents);
+                    stdDAO.updateStudent(tempStudents, currentUser);
                     setVisible(false);
                     dispose();
                 } else {
-                    stdDAO.addStudent(tempStudents);
+                    stdDAO.addStudent(tempStudents, currentUser);
                     clearFields();
                 }
 
                 // refresh list
-                stdSearchApp.refreshStudentList();
+                managementMainFrame.refreshTable();
 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(stdSearchApp, "Error",
+                JOptionPane.showMessageDialog(managementMainFrame, "Error",
                         "ERROR: " + e, JOptionPane.ERROR_MESSAGE);
             }
 
@@ -155,7 +158,6 @@ public class StudentDialog extends JDialog {
             setVisible(false);
             dispose();
         }
-
     }
 
     public void populateTxtFields() {
@@ -180,13 +182,13 @@ public class StudentDialog extends JDialog {
                     ssn.length() <= 11) {
                 return true;
             } else {
-                JOptionPane.showMessageDialog(stdSearchApp, "Error",
-                        "Character limit exceeded in one of the fields", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(managementMainFrame, "Error:\n" +
+                        "Character limit exceeded in one of the fields", getTitle(), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         } else {
-            JOptionPane.showMessageDialog(stdSearchApp, "Error",
-                    "Each field requires at least two characters length", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(managementMainFrame, "Error:\n" +
+                    "Each field requires at least two characters length", getTitle(), JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }

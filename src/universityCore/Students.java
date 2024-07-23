@@ -1,6 +1,6 @@
 package universityCore;
 
-public class Students extends People {
+public class Students extends UniversityEntity {
 
     public Students(){ // empty constructor for building generic objects
         super();

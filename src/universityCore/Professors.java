@@ -1,6 +1,6 @@
 package universityCore;
 
-public class Professors extends People {
+public class Professors extends UniversityEntity {
     private double salary;
     private Courses course;
 

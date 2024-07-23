@@ -1,11 +1,15 @@
 package universityGUI;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class MainGUI extends JFrame {
+    char entity;
     
-    public MainGUI() {
+    public MainGUI(int currentUser) {
+
         /* ---- frame properties */
         setTitle("Manager");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -53,9 +57,31 @@ public class MainGUI extends JFrame {
 
         // students button
         studentsB.setPreferredSize(new Dimension(150, 25));
+        studentsB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    entity = 's';
+                    StudentFacultyManagementGUI std = new StudentFacultyManagementGUI(currentUser, entity);
+                    std.setVisible(true);
+                } catch (Exception exc) {
+                    JOptionPane.showMessageDialog(MainGUI.this, "Error:\n" + exc, getTitle(), JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
         // professors button
         professorsB.setPreferredSize(new Dimension(150, 25));
+        professorsB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    entity = 'p';
+                    StudentFacultyManagementGUI std = new StudentFacultyManagementGUI(currentUser, entity);
+                    std.setVisible(true);
+                } catch (Exception exc) {
+                    JOptionPane.showMessageDialog(MainGUI.this, "Error:\n" + exc, getTitle(), JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
         // classes button
         classesB.setPreferredSize(new Dimension(150, 25));
@@ -80,10 +106,5 @@ public class MainGUI extends JFrame {
 
         add(mainPanel);
         pack();
-    }
-
-    public static void main(String[] args) {
-        MainGUI gui = new MainGUI();
-        gui.setVisible(true);
     }
 }

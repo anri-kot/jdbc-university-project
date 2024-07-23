@@ -59,6 +59,26 @@ public class CoursesDAO {
         } finally {
             close(st, rs);
         }
+    
+    }
+    // get course by exact name
+    public Courses searchCoursesName(String name) throws Exception {
+        // Courses object
+        Courses tempCourses = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = con.prepareStatement("select * from courses where c_name = ?");
+            st.setString(1,name);
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                tempCourses = rowToCourses(rs);
+            }
+            return tempCourses;
+        } finally {
+            close(st, rs);
+        }
     }
 
     // get course by id

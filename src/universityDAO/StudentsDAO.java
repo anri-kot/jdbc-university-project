@@ -14,7 +14,6 @@ public class StudentsDAO {
     private Connection con;
 
     public StudentsDAO() throws Exception {
-
         // connection
         con = ConnectionManager.getConnection();
     }
@@ -98,8 +97,10 @@ public class StudentsDAO {
     }
 
     // Add new student
-    public void addStudent(Students theStudents) throws Exception {
+    public void addStudent(Students theStudents, int userid) throws Exception {
+        // initializing Statement and ResultSet
         PreparedStatement st = null;
+        ResultSet rs = null;
         try {
             // sql statement
             st = con.prepareStatement(
@@ -115,6 +116,25 @@ public class StudentsDAO {
             st.executeUpdate();
             JOptionPane.showMessageDialog(null, "Student registered sucessfully.",
                     "Student registered", JOptionPane.INFORMATION_MESSAGE);
+            
+            /* ---- add to log ---- */
+
+            int newStudentId = 0;
+
+            // sql statement
+            st = con.prepareStatement(
+                    "select * from students where st_ssn = ?");
+            st.setString(1, theStudents.getSsn());
+            
+            rs = st.executeQuery();
+            // getting new result from the queue
+            if (rs.next()) {
+                Students tempStudents = rowToStudent(rs);
+                newStudentId = tempStudents.getMatr();
+            }
+            StudentsLogDAO logDAO = new StudentsLogDAO();
+            logDAO.addLog(userid, newStudentId, "Added new Student");
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error",
                     "ERROR: " + e, JOptionPane.ERROR_MESSAGE);
@@ -123,7 +143,7 @@ public class StudentsDAO {
     }
 
     // Update student
-    public void updateStudent(Students theStudents) throws Exception {
+    public void updateStudent(Students theStudents, int userid) throws Exception {
         PreparedStatement st = null;
         try {
             // sql statement
@@ -141,6 +161,11 @@ public class StudentsDAO {
             st.executeUpdate();
             JOptionPane.showMessageDialog(null, "Student updated sucessfully.",
                     "Student updated", JOptionPane.INFORMATION_MESSAGE);
+
+            // add to log
+            StudentsLogDAO logDAO = new StudentsLogDAO();
+            logDAO.addLog(userid, theStudents.getMatr(), "Updated Student");
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error",
                     "ERROR: " + e, JOptionPane.ERROR_MESSAGE);
@@ -160,6 +185,7 @@ public class StudentsDAO {
             st.executeUpdate();
             JOptionPane.showMessageDialog(null, "Student deleted sucessfully.",
                     "Student deleted", JOptionPane.INFORMATION_MESSAGE);
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error" + e,
                     "ERROR: ", JOptionPane.ERROR_MESSAGE);
