@@ -5,7 +5,7 @@ import java.util.List;
 import universityCore.logs.StudentsLog;
 import universityDAO.UsersDAO;
 
-public class LogTableModel extends AbstractTableModel {
+public class StudentsLogTableModel extends AbstractTableModel {
     // column indexes
     private static final int ID_COL = 0;
     private static final int USER_COL = 1;
@@ -16,7 +16,7 @@ public class LogTableModel extends AbstractTableModel {
     private String[] columnNames = {"Log ID", "User", "Student ID", "Action", "Date"};
     private List<StudentsLog> logs;
 
-    public LogTableModel(List<StudentsLog> logs) {
+    public StudentsLogTableModel(List<StudentsLog> logs) {
         this.logs = logs;
     }
 

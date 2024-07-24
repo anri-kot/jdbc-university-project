@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import universityCore.Classes;
 import universityCore.Courses;
 
@@ -77,9 +79,10 @@ public class ClassesDAO {
             st.setInt(3, theClass.getCourses().getIdCourse());
 
             st.executeUpdate();
-            System.out.println("Class " + theClass.getIdClass() + " added successfully");
+            JOptionPane.showMessageDialog(null, "Class added sucessfully.",
+                    "Class added", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception exc) {
-            System.out.println(exc);
+            JOptionPane.showMessageDialog(null, "Error:\n" + exc, "Error", JOptionPane.ERROR_MESSAGE);
         }
         st.close();
     }
@@ -91,35 +94,37 @@ public class ClassesDAO {
 
         try {
             // sql statements
-            st = con.prepareStatement("update classes set idCourse = ?, semester = ?, Courses_idCourse = ? where idCourse = ?");
+            st = con.prepareStatement("update classes set semester = ?, Courses_idCourse = ? where idClass = ?");
             // setting parameters
-            st.setString(1, theClass.getIdClass());
+            st.setInt(1, theClass.getCourses().getIdCourse());
             st.setInt(2, theClass.getSemester());
-            st.setInt(3, theClass.getCourses().getIdCourse());
+            st.setString(3, theClass.getIdClass());
 
             st.executeUpdate();
-            System.out.println("Class " + theClass.getIdClass() + " updated successfully.");
+            JOptionPane.showMessageDialog(null, "Class updated sucessfully.",
+                    "Class updated", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception exc) {
-            System.out.println(exc);
+            JOptionPane.showMessageDialog(null, "Error:\n" + exc, "Error", JOptionPane.ERROR_MESSAGE);
         }
         st.close();
     }
 
     // delete classes
-    public void deleteClass(Classes theClass) throws Exception {
+    public void deleteClass(String classId) throws Exception {
         // initializing Statements
         PreparedStatement st = null;
 
         try {
             // sql statements
-            st = con.prepareStatement("delete classes where idClass = ?");
+            st = con.prepareStatement("delete from classes where idClass = ?");
             // setting parameters
-            st.setString(1, theClass.getIdClass());
+            st.setString(1, classId);
 
             st.executeUpdate();
-            System.out.println("Class " + theClass + " deleted successfully");
+            JOptionPane.showMessageDialog(null, "Class deleted sucessfully.",
+                    "Class deleted", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception exc) {
-            System.out.println(exc);
+            JOptionPane.showMessageDialog(null, "Error:\n" + exc, "Error", JOptionPane.ERROR_MESSAGE);
         }
         st.close();
     }

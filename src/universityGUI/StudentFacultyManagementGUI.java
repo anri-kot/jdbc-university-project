@@ -12,7 +12,6 @@ import universityDAO.ProfessorsDAO;
 import universityDAO.StudentsDAO;
 import universityGUI.professorsGUI.ProfessorsManagementDialog;
 import universityGUI.professorsGUI.ProfessorsTableModel;
-import universityGUI.studentsGUI.AuditLogDialog;
 import universityGUI.studentsGUI.StudentEnrollmentDialog;
 import universityGUI.studentsGUI.StudentManagementDialog;
 import universityGUI.studentsGUI.StudentsTableModel;
@@ -166,7 +165,7 @@ public class StudentFacultyManagementGUI extends JFrame {
         logButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    AuditLogDialog dialog = new AuditLogDialog(StudentFacultyManagementGUI.this, currentUser);
+                    AuditLogDialog dialog = new AuditLogDialog(StudentFacultyManagementGUI.this, currentUser, entity);
                     dialog.setVisible(true);
                 } catch (Exception exc) {
                     JOptionPane.showConfirmDialog(StudentFacultyManagementGUI.this, "Error:\n" + exc, getTitle(), JOptionPane.ERROR_MESSAGE);

@@ -105,8 +105,8 @@ public class StudentManagementDialog extends JDialog {
 
         // ---- add objects to the window
         mainPanel.add(formPanel, BorderLayout.NORTH);
-        add(mainPanel, BorderLayout.NORTH);
-        add(btnPanel, BorderLayout.SOUTH);
+        mainPanel.add(btnPanel, BorderLayout.SOUTH);
+        add(mainPanel);
 
     }
 
@@ -175,7 +175,7 @@ public class StudentManagementDialog extends JDialog {
     }
 
     public boolean checkFields(String name, String address, String phone, String ssn) {
-        if (Stream.of(name, address, phone, ssn).anyMatch(s -> s.length() >= 2)) {
+        if (Stream.of(name, address, phone, ssn).allMatch(s -> s.length() >= 2)) {
             if (name.length() <= 75 ||
                     address.length() <= 100 ||
                     phone.length() <= 11 ||

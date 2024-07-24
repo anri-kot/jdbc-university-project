@@ -8,9 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import universityCore.Enrollments;
 import universityDAO.EnrollmentsDAO;
+import universityGUI.FontsAndColors;
 
 
-public class StudentEnrollmentDialog extends JDialog {
+public class StudentEnrollmentDialog extends JDialog implements FontsAndColors {
     // global variables
     private int matr;
     private EnrollmentsDAO erlDAO;
@@ -62,7 +63,7 @@ public class StudentEnrollmentDialog extends JDialog {
         table.setFont(segoePlain);
         table.setShowHorizontalLines(false);
         // table header
-        table.getTableHeader().setBackground(new Color(148, 48, 103));
+        table.getTableHeader().setBackground(PRIMARY_C);
         table.getTableHeader().setForeground(Color.WHITE);
         table.getTableHeader().setFont(segoeBold);
         // fill table

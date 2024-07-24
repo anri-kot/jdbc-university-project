@@ -1,23 +1,25 @@
-package universityGUI.studentsGUI;
+package universityGUI;
 
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.util.List;
-import universityCore.logs.StudentsLog;
+import universityCore.logs.*;
+import universityDAO.ProfessorsLogDAO;
 import universityDAO.StudentsLogDAO;
 import universityDAO.UsersDAO;
-import universityGUI.StudentFacultyManagementGUI;
+import universityGUI.professorsGUI.ProfessorsLogTableModel;
+import universityGUI.studentsGUI.StudentsLogTableModel;
 
 public class AuditLogDialog extends JDialog {
     StudentFacultyManagementGUI stMain;
 
-    public AuditLogDialog(StudentFacultyManagementGUI stMain, int theUserId) {
-        this(theUserId);
+    public AuditLogDialog(StudentFacultyManagementGUI stMain, int theUserId, char entity) {
+        this(entity, theUserId);
         this.stMain = stMain;
     }
     
-    public AuditLogDialog(int userId) {
+    public AuditLogDialog(char entity, int userId) {
         /* ---- dialog properties ---- */
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(600, 400);
@@ -52,12 +54,22 @@ public class AuditLogDialog extends JDialog {
         // table
         JTable table = new JTable();
         try {
-            // get logs
-            StudentsLogDAO dao = new StudentsLogDAO(); 
-            List<StudentsLog> logs = dao.getLogs();
+            if (entity == 's') {
+                // get logs
+                StudentsLogDAO dao = new StudentsLogDAO(); 
+                List<StudentsLog> logs = dao.getLogs();
 
-            LogTableModel model = new LogTableModel(logs);
-            table.setModel(model);
+                StudentsLogTableModel stLogModel = new StudentsLogTableModel(logs);
+                table.setModel(stLogModel);
+            } else {
+                // get logs
+                ProfessorsLogDAO dao = new ProfessorsLogDAO();
+                List<ProfessorsLog> logs = dao.getLogs();
+
+                ProfessorsLogTableModel prLogModel = new ProfessorsLogTableModel(logs);
+                table.setModel(prLogModel);
+            }
+
         } catch (Exception exc) {
             JOptionPane.showMessageDialog(AuditLogDialog.this, "Error:\n" + exc, getTitle(), JOptionPane.ERROR_MESSAGE);
         }

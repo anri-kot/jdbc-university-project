@@ -13,7 +13,7 @@ import javax.swing.border.EmptyBorder;
 
 import universityDAO.UsersDAO;
 
-public class LoginFrame extends JFrame implements Fonts {
+public class LoginFrame extends JFrame implements FontsAndColors {
     
     public LoginFrame() {
         /* ---- FRAME PROPERTIES ---- */

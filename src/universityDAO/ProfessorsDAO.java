@@ -95,7 +95,9 @@ public class ProfessorsDAO {
 
     // add new professor
     public void addProfessors(Professors theProfessors, int userId) throws Exception {
+        // initializing Statements and ResultSet
         PreparedStatement st = null;
+        ResultSet rs = null;
         try {
             st = con.prepareStatement("insert into professors (pr_name, pr_address, pr_phone, pr_ssn, salary, Courses_idCourse) values (?, ?, ?, ?, ?, ?)");
 
@@ -111,16 +113,38 @@ public class ProfessorsDAO {
             JOptionPane.showMessageDialog(null, "Professor added sucessfully.",
                     "Professor added", JOptionPane.INFORMATION_MESSAGE);
 
+            /* -- adding entry to the log -- */
+
+            int currentProfessorId = 0;
+
+            // getting the added professor id
+            st = con.prepareStatement("select * from professors where pr_ssn = ?");
+            st.setString(1, theProfessors.getSsn());
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                Professors tempProfessors = rowToProfessors(rs);
+                currentProfessorId = tempProfessors.getMatr();
+            }
+            // sending log entry
+            ProfessorsLogDAO logDAO = new ProfessorsLogDAO();
+            logDAO.addLogs(userId, currentProfessorId, "Added new Professor");
         } catch (Exception exc) {
             System.out.println(exc);
         }
-        st.close();
+        if (st != null) {
+            st.close();
+        }
+        if (rs != null) {
+            rs.close();
+        }
     }
 
     // update professors
     public void updateProfessors(Professors theProfessor, int userId) throws Exception {
-        // initializing statements
+        // initializing statements and resultset
         PreparedStatement st = null;
+        ResultSet rs = null;
 
         try { 
             // sql statements
@@ -138,10 +162,32 @@ public class ProfessorsDAO {
             JOptionPane.showMessageDialog(null, "Student updated sucessfully.",
                     "Student updated", JOptionPane.INFORMATION_MESSAGE);
 
+            /* -- adding entry to the log -- */
+
+            int currentProfessorId = 0;
+
+            // getting the added professor id
+            st = con.prepareStatement("select * from professors where pr_ssn = ?");
+            st.setString(1, theProfessor.getSsn());
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                Professors tempProfessors = rowToProfessors(rs);
+                currentProfessorId = tempProfessors.getMatr();
+            }
+            // sending log entry
+            ProfessorsLogDAO logDAO = new ProfessorsLogDAO();
+            logDAO.addLogs(userId, currentProfessorId, "Updated Professor");
+
         } catch (Exception exc) {
             System.out.println(exc);
         }
-        st.close();
+        if (st != null) {
+            st.close();
+        }
+        if (rs != null) {
+            rs.close();
+        }
     }
 
     // delete professors

@@ -2,9 +2,7 @@ package universityDAO;
 
 import java.sql.*;
 import java.util.*;
-
 import javax.swing.JOptionPane;
-
 import universityCore.Students;
 import universityCore.Users;
 import universityCore.logs.StudentsLog;

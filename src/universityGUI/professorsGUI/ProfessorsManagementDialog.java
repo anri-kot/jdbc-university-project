@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.List;
-
 import universityCore.Courses;
 import universityCore.Professors;
 import universityDAO.CoursesDAO;
@@ -25,9 +24,9 @@ public class ProfessorsManagementDialog extends JDialog {
     private JTextField tfName, tfAddress, tfPhone, tfSsn, tfSalary;
     private JComboBox<String> cbCourses;
 
-    public ProfessorsManagementDialog(StudentFacultyManagementGUI themanagementMainFrame, ProfessorsDAO thePrDAO, Professors thePreviouProfessors, boolean theUpdateMode, int idUser) {
+    public ProfessorsManagementDialog(StudentFacultyManagementGUI theManagementMainFrame, ProfessorsDAO thePrDAO, Professors thePreviouProfessors, boolean theUpdateMode, int idUser) {
         this();
-        managementMainFrame = themanagementMainFrame;
+        managementMainFrame = theManagementMainFrame;
         prDAO = thePrDAO;
         previousProfessors = thePreviouProfessors;
         updateMode = theUpdateMode;
@@ -43,7 +42,7 @@ public class ProfessorsManagementDialog extends JDialog {
         // ---- properties ----
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setLocation(400, 100);
+        setLocationRelativeTo(null);
         setMinimumSize(new Dimension(500, 440));
         setResizable(false);
         setTitle("Register Professor");
@@ -90,7 +89,7 @@ public class ProfessorsManagementDialog extends JDialog {
         String[] cbItems = new String[cbItemsArray.size()];
         cbItemsArray.toArray(cbItems);
         cbCourses =  new JComboBox<>(cbItems);
-        cbCourses.setSelectedIndex(-1);;
+        cbCourses.setSelectedIndex(-1);
         cbCourses.setBackground(Color.WHITE);
 
         // -- buttons --
@@ -143,22 +142,23 @@ public class ProfessorsManagementDialog extends JDialog {
 
         // adding panels to the window
         mainPanel.add(formPanel, BorderLayout.NORTH);
-        add(mainPanel, BorderLayout.NORTH);
-        add(btnPanel, BorderLayout.SOUTH);
+        mainPanel.add(btnPanel, BorderLayout.SOUTH);
+        add(mainPanel);
     }
 
     /* -- Button Event Handlers -- */
 
     // save
     public void saveProfessor() {
-        // get student info
+        // get professor info
         String name = tfName.getText();
         String address = tfAddress.getText();
         String phone = tfPhone.getText();
         String ssn = tfSsn.getText();
         double salary = Double.parseDouble(tfSalary.getText());
 
-        // setting course
+        // getting course
+
         if (cbCourses.getSelectedIndex() < 0 ) {
             int confirm = JOptionPane.showConfirmDialog(managementMainFrame, "Course not added.\nContinue?", getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (confirm != JOptionPane.YES_OPTION) {
@@ -178,7 +178,7 @@ public class ProfessorsManagementDialog extends JDialog {
 
         Professors tempProfessors = null;
 
-        if (checkFields(name, address, phone, ssn, salary, course)) {
+        if (checkFields(name, address, phone, ssn, salary)) {
 
             if (updateMode) {
                 // save updated info in tempProfessors object
@@ -214,14 +214,10 @@ public class ProfessorsManagementDialog extends JDialog {
                         getTitle(), JOptionPane.ERROR_MESSAGE);
             }
 
-        } else {
-            // close window
-            setVisible(false);
-            dispose();
-        }
+        } else {return;}
     }
 
-    private boolean checkFields(String name, String address, String phone, String ssn, double salary, Courses course) {
+    private boolean checkFields(String name, String address, String phone, String ssn, double salary) {
         if (Stream.of(name, address, phone, ssn).allMatch(s -> s.length() >= 2) || salary > 100) {
             if (name.length() <= 75 ||
                     address.length() <= 100 ||
@@ -230,12 +226,12 @@ public class ProfessorsManagementDialog extends JDialog {
                 return true;
             } else {
                 JOptionPane.showMessageDialog(managementMainFrame, "Error:\n" +
-                        "Character limit exceeded in one of the fields and salary must be higher than 100", getTitle(), JOptionPane.ERROR_MESSAGE);
+                        "Character limit exceeded in one of the fields or salary is be lower than 100", getTitle(), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         } else {
             JOptionPane.showMessageDialog(managementMainFrame, "Error:\n" +
-                        "Character limit exceeded in one of the fields and salary must be higher than 100", getTitle(), JOptionPane.ERROR_MESSAGE);
+                        "All fields must be at least two characters long and salary must be higher than 100", getTitle(), JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }

@@ -4,6 +4,8 @@ public class Professors extends UniversityEntity {
     private double salary;
     private Courses course;
 
+    public Professors(){} // empty constructor for creating generic Professors Objects
+
     public Professors(int matr, String name, String address, String phone, String ssn, double salary, Courses course) {
         super(matr, name, address, phone, ssn);
         this.salary = salary;
