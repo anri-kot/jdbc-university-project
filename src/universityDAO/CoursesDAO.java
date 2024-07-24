@@ -103,7 +103,7 @@ public class CoursesDAO {
     }
 
     // add new course
-    public void AddCourse(Courses theCourse) throws Exception {
+    public void addCourse(Courses theCourse) throws Exception {
         PreparedStatement st = null;
 
         try {
@@ -120,7 +120,7 @@ public class CoursesDAO {
     }
 
     // update course
-    public void UpdateCourse(Courses theCourse) throws Exception {
+    public void updateCourse(Courses theCourse) throws Exception {
         PreparedStatement st = null;
 
         try {
@@ -139,7 +139,7 @@ public class CoursesDAO {
     }
 
     // delete course
-    public void DeleteCourse(int id) throws Exception {
+    public void deleteCourse(int id) throws Exception {
         PreparedStatement st = null;
 
         try {
@@ -176,11 +176,5 @@ public class CoursesDAO {
         int c_duration = rs.getInt("c_duration");
 
         return new Courses(idCourse, c_name, c_duration); // returs course object
-    }
-
-    public static void main(String[] args) throws Exception {
-        // Courses c = new Courses(4, "Python", 100);
-        new CoursesDAO().DeleteCourse(4);
-        System.out.println(new CoursesDAO().getAllCourses());
     }
 }

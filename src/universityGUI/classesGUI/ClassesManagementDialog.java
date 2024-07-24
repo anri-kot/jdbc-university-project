@@ -49,7 +49,7 @@ public class ClassesManagementDialog extends JDialog {
         // ---- properties ----
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(cbCourses);
+        setLocation(100, 200);
         setSize(400, 300);
         setResizable(false);
         setTitle("Register Class");

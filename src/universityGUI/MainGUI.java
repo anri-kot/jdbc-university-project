@@ -112,7 +112,7 @@ public class MainGUI extends JFrame implements FontsAndColors {
         // action
         classesB.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                entity = 'l'; // entity l, taken from the second letter of 'classes'
+                entity = 'l'; // entity l, taken from the second letter of 'classes' [l]
                 CourseClassManagementGUI courseClassGUI = new CourseClassManagementGUI(currentUser, entity);
                 courseClassGUI.setVisible(true);
             }
@@ -123,6 +123,14 @@ public class MainGUI extends JFrame implements FontsAndColors {
         coursesB.setFont(SEGOE_BOLD);
         coursesB.setBackground(SECONDARY_C);
         coursesB.setForeground(Color.WHITE);
+        // action
+        coursesB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                entity = 'o'; // entity o, taken from the second letter of courses [o]
+                CourseClassManagementGUI courseClassGUI = new CourseClassManagementGUI(currentUser, entity);
+                courseClassGUI.setVisible(true);
+            }
+        });
 
         /* ---- adding components to panels ---- */
         lblPanel.add(topLabel1, top1);

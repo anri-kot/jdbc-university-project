@@ -17,10 +17,13 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
 import universityCore.Classes;
+import universityCore.Courses;
 import universityDAO.ClassesDAO;
 import universityDAO.CoursesDAO;
 import universityGUI.classesGUI.ClassesManagementDialog;
 import universityGUI.classesGUI.ClassesTableModel;
+import universityGUI.coursesGUI.CoursesManagementDialog;
+import universityGUI.coursesGUI.CoursesTableModel;
 
 public class CourseClassManagementGUI extends JFrame implements FontsAndColors {
     private int currentUser;
@@ -117,6 +120,13 @@ public class CourseClassManagementGUI extends JFrame implements FontsAndColors {
                 ClassesTableModel model = new ClassesTableModel(classes);
                 
                 table.setModel(model);
+            } else {
+                // get all courses from the db
+                List<Courses> courses = coDAO.getAllCourses();
+                // create table model
+                CoursesTableModel model = new CoursesTableModel(courses);
+
+                table.setModel(model);
             }
         } catch (Exception exc) {
             JOptionPane.showMessageDialog(CourseClassManagementGUI.this, "Error while filling the table.\n" + exc, getTitle(), JOptionPane.ERROR_MESSAGE);
@@ -146,7 +156,8 @@ public class CourseClassManagementGUI extends JFrame implements FontsAndColors {
             ClassesManagementDialog dialog = new ClassesManagementDialog(CourseClassManagementGUI.this, clDAO, null, false);
             dialog.setVisible(true);
         } else {
-
+            CoursesManagementDialog dialog = new CoursesManagementDialog(CourseClassManagementGUI.this, coDAO, null, false);
+            dialog.setVisible(true);
         }
     }
 
@@ -168,10 +179,15 @@ public class CourseClassManagementGUI extends JFrame implements FontsAndColors {
                 ClassesManagementDialog dialog = new ClassesManagementDialog(CourseClassManagementGUI.this, clDAO, tempClasses, true);
                 dialog.setVisible(true);
             } else {
-                
+                // get data from selected row
+                Courses tempCourses = (Courses) table.getValueAt(row, CoursesTableModel.OBJECT_COL);
+
+                CoursesManagementDialog dialog = new CoursesManagementDialog(CourseClassManagementGUI.this, coDAO, tempCourses, true);
+                dialog.setVisible(true);
             }
         } catch (Exception exc) {
-
+            JOptionPane.showMessageDialog(CourseClassManagementGUI.this, "Error: " + exc, "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -199,7 +215,18 @@ public class CourseClassManagementGUI extends JFrame implements FontsAndColors {
                 // send class id to DAO for deletion
                 clDAO.deleteClass(tempClasses.getIdClass());
             } else {
+                // get data from selected row
+                Courses tempCourses = (Courses) table.getValueAt(row, CoursesTableModel.OBJECT_COL);
 
+                // promp confirm window
+                int confirm = JOptionPane.showConfirmDialog(CourseClassManagementGUI.this, "Are you sure you want to delete?", getTitle(),
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (confirm != JOptionPane.YES_OPTION) {
+                    return;
+                }
+
+                // send course id to DAO for deletion
+                coDAO.deleteCourse(tempCourses.getIdCourse());
             }
             refreshTable();
         } catch (Exception exc) {
@@ -219,7 +246,12 @@ public class CourseClassManagementGUI extends JFrame implements FontsAndColors {
 
                 table.setModel(model);
             } else {
+                List<Courses> courses = coDAO.getAllCourses();
 
+                // create model and update list
+                CoursesTableModel model = new CoursesTableModel(courses);
+
+                table.setModel(model);
             }
         } catch (Exception exc) {
             JOptionPane.showMessageDialog(this, "Error:\n" + exc, "Error", JOptionPane.ERROR_MESSAGE);
