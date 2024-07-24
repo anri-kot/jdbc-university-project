@@ -21,6 +21,7 @@ public class LoginFrame extends JFrame implements FontsAndColors {
         setLocationRelativeTo(null);
         setTitle("Login");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
 
         /* ---- Panels ---- */
         JPanel mainPanel, northPanel, centerPanel, southPanel;
