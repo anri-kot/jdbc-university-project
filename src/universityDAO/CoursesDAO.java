@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import universityCore.Courses;
 
 public class CoursesDAO {
@@ -113,7 +116,8 @@ public class CoursesDAO {
             st.setInt(2, theCourse.getC_duration());
             st.executeUpdate();
 
-            System.out.println("Course added successfully");
+            JOptionPane.showMessageDialog(null, "Course added sucessfully.",
+                    "Course added", JOptionPane.INFORMATION_MESSAGE);
         } finally {
             st.close();
         }
@@ -131,7 +135,8 @@ public class CoursesDAO {
             st.setInt(3, theCourse.getIdCourse());
             st.executeUpdate();
 
-            System.out.println("Course updated successfully");
+            JOptionPane.showMessageDialog(null, "Course updated sucessfully.",
+                    "Course updated", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception exc) {
             System.out.println(exc);
         }
@@ -148,7 +153,8 @@ public class CoursesDAO {
             st.setInt(1, id);
             st.executeUpdate();
 
-            System.out.println("Course deleted successfully");
+            JOptionPane.showMessageDialog(null, "Course deleted sucessfully.",
+                    "Course deleted", JOptionPane.INFORMATION_MESSAGE);
         } finally {
             st.close();
         }

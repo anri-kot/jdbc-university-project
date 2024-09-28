@@ -12,7 +12,7 @@ import universityCore.Enrollments;
 import universityCore.Students;
 import universityDAO.EnrollmentsDAO;
 
-public class EnrollmentsDialog extends JDialog {
+public class EnrollmentsFrame extends JDialog {
 
     private EnrollmentsDAO enrDAO;
     private StudentEnrollmentDialog stdEnrDiag;
@@ -22,7 +22,7 @@ public class EnrollmentsDialog extends JDialog {
     private boolean updateMode;
 
     // Constructor that will be used for the addEnrollmentsDialog
-    public EnrollmentsDialog(StudentEnrollmentDialog theStdEnrDiag, EnrollmentsDAO theEnrDAO, int st_matr, Enrollments thePreviousEnrollments,
+    public EnrollmentsFrame(StudentEnrollmentDialog theStdEnrDiag, EnrollmentsDAO theEnrDAO, int st_matr, Enrollments thePreviousEnrollments,
             boolean theUpdateMode) {
         this(st_matr);
         stdEnrDiag = theStdEnrDiag;
@@ -36,7 +36,7 @@ public class EnrollmentsDialog extends JDialog {
         }
     }
 
-    public EnrollmentsDialog(int matr) {
+    public EnrollmentsFrame(int matr) {
         // ---- properties ----
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

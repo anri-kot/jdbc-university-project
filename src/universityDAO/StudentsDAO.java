@@ -96,6 +96,59 @@ public class StudentsDAO {
         }
     }
 
+    // return students with enrollments
+    public List<Students> searchStudentsByClass(String idClass) throws Exception {
+        List<Students> list = new ArrayList<>(); // will receive the rows
+
+        // initializing statements and resultset
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            // sql statement
+            st = con.prepareStatement("select Students.* from Students join enrollments on enrollments.Students_st_matr = Students.st_matr " +
+                "where Enrollments.Classes_idClass = ?");
+            // params
+            st.setString(1, idClass);
+            
+            rs = st.executeQuery();
+            // loop to get all rows
+            while (rs.next()) {
+                Students tempStudents = rowToStudent(rs);
+                list.add(tempStudents);
+            }
+            return list;
+        } finally {
+            close(st, rs);
+        }
+    }
+
+    // return students with enrollments
+    public List<Students> searchStudentsByNameAndClass(String name, String idClass) throws Exception {
+        List<Students> list = new ArrayList<>(); // will receive the rows
+
+        // initializing statements and resultset
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            // sql statement
+            st = con.prepareStatement("select * from Students join enrollments on enrollments.Students_st_matr = Students.st_matr " +
+            "where Students.st_name like ? and Enrollments.Classes_idClass = ?");
+            // params
+            st.setString(1, "%" + name + "%");
+            st.setString(2, idClass);
+            
+            rs = st.executeQuery();
+            // loop to get all rows
+            while (rs.next()) {
+                Students tempStudents = rowToStudent(rs);
+                list.add(tempStudents);
+            }
+            return list;
+        } finally {
+            close(st, rs);
+        }
+    }
+
     // Add new student
     public void addStudent(Students theStudents, int userid) throws Exception {
         // initializing Statement and ResultSet

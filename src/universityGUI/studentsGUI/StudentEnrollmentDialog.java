@@ -11,7 +11,7 @@ import universityDAO.EnrollmentsDAO;
 import universityGUI.FontsAndColors;
 
 
-public class StudentEnrollmentDialog extends JDialog implements FontsAndColors {
+public class StudentEnrollmentDialog extends JFrame implements FontsAndColors {
     // global variables
     private int matr;
     private EnrollmentsDAO erlDAO;
@@ -97,7 +97,7 @@ public class StudentEnrollmentDialog extends JDialog implements FontsAndColors {
             // pop dialog
             public void actionPerformed(ActionEvent e) {
                 try {
-                    EnrollmentsDialog enrDialog = new EnrollmentsDialog(StudentEnrollmentDialog.this, erlDAO, st_matr, null, false);
+                    EnrollmentsFrame enrDialog = new EnrollmentsFrame(StudentEnrollmentDialog.this, erlDAO, st_matr, null, false);
                     enrDialog.setVisible(true);
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(StudentEnrollmentDialog.this, "Error:\n" + e, "Error", JOptionPane.ERROR_MESSAGE);
@@ -119,7 +119,7 @@ public class StudentEnrollmentDialog extends JDialog implements FontsAndColors {
                     // get the selected row into an Enrollments object
                     Enrollments enrollments = (Enrollments) table.getValueAt(row, EnrollmentsTableModel.OBJECT_COL);
 
-                    EnrollmentsDialog enrDialog = new EnrollmentsDialog(StudentEnrollmentDialog.this, erlDAO, st_matr, enrollments, true);
+                    EnrollmentsFrame enrDialog = new EnrollmentsFrame(StudentEnrollmentDialog.this, erlDAO, st_matr, enrollments, true);
                     enrDialog.setVisible(true);
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(StudentEnrollmentDialog.this, "Error:\n" + exc, getTitle(), JOptionPane.ERROR_MESSAGE);

@@ -1,16 +1,35 @@
 package universityCore;
 
+import java.sql.Date;
+
 public class Grades {
     private int idGrade;
     private double grade;
-    private Students students;
-    private Classes classes;
+    private Enrollments enrollments;
 
-    public Grades(int idGrade, double grade, Students students, Classes classes) {
+    private Date date_received;
+
+    public Grades(int idGrade, double grade, Enrollments enrollments, Date date_received) {
         this.idGrade = idGrade;
         this.grade = grade;
-        this.students = students;
-        this.classes = classes;
+        this.enrollments = enrollments;
+        this.date_received = date_received;
+    }
+
+    public String toString() {
+        return "\n[gradeID=" + getIdGrade() +
+            ", grade=" + getGrade() +
+            ", enrollment=" + getEnrollments().getIdEnrollment() +
+            ", date_received=" + getDate_received() +
+            "]";
+    }
+
+    public Date getDate_received() {
+        return date_received;
+    }
+
+    public void setDate_received(Date date_received) {
+        this.date_received = date_received;
     }
 
     public int getIdGrade() {
@@ -29,19 +48,11 @@ public class Grades {
         this.grade = grade;
     }
 
-    public Students getStudents() {
-        return students;
+    public Enrollments getEnrollments() {
+        return enrollments;
     }
 
-    public void setStudents(Students students) {
-        this.students = students;
-    }
-
-    public Classes getClasses() {
-        return classes;
-    }
-
-    public void setClasses(Classes classes) {
-        this.classes = classes;
+    public void setEnrollments(Enrollments enrollments) {
+        this.enrollments = enrollments;
     }
 }

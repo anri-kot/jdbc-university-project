@@ -5,9 +5,13 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
+
+import universityCore.Classes;
 import universityCore.Professors;
 import universityCore.Students;
+import universityDAO.ClassesDAO;
 import universityDAO.ProfessorsDAO;
 import universityDAO.StudentsDAO;
 import universityGUI.professorsGUI.ProfessorsManagementDialog;
@@ -21,6 +25,7 @@ public class StudentFacultyManagementGUI extends JFrame {
     private ProfessorsDAO prDAO;
     private char entity;
     private int currentUser;
+    private JComboBox<String> classFilter;
     private JTable table;
     private Font segoePlain = new Font("Segoe UI", Font.PLAIN, 12);
     private Font segoeBold = new Font("Segoe UI", Font.BOLD, 12);
@@ -90,6 +95,35 @@ public class StudentFacultyManagementGUI extends JFrame {
         table.getTableHeader().setForeground(Color.WHITE);
         table.getTableHeader().setFont(segoeBold);
 
+        if (entity == 's') {
+            // top panel class filter button
+            JLabel filterLabel = new JLabel("Class:");
+            // getting the classes
+            List<String> cbItemsArray = new ArrayList<>();
+            try {
+                ClassesDAO clDAO = new ClassesDAO();
+                List<Classes> allClasses = clDAO.getAllClasses();
+                Classes tempClasses;
+                for (int i = 0; i < allClasses.size(); i++) {
+                    tempClasses = allClasses.get(i);
+                    cbItemsArray.add(tempClasses.getIdClass());
+                }
+
+            } catch (Exception exc) {
+                JOptionPane.showMessageDialog(StudentFacultyManagementGUI.this, "Error",
+                        "ERROR:\n" + exc, JOptionPane.ERROR_MESSAGE);
+            }
+
+            String[] cbItems = new String[cbItemsArray.size()];
+            cbItemsArray.toArray(cbItems);
+            classFilter = new JComboBox<>(cbItems);
+            classFilter.insertItemAt("ALL", 0);
+            classFilter.setSelectedIndex(0);
+
+            northSrcPanel.add(filterLabel);
+            northSrcPanel.add(classFilter);
+        }
+
         // top panel search button
         JButton searchButton = new JButton("Search");
         searchButton.addActionListener(new ActionListener() {
@@ -100,7 +134,7 @@ public class StudentFacultyManagementGUI extends JFrame {
                 // not empty
                 // B. print all data if textField is empty
                 String name = searchTextField.getText();
-                searchTable(name);
+                searchTable(name, classFilter);
             }
         });
         northSrcPanel.add(searchButton);
@@ -185,10 +219,9 @@ public class StudentFacultyManagementGUI extends JFrame {
         bttnPanel.add(logButton);
 
         // east panel properties
-        JPanel eastPanel = new JPanel();
-        eastPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        // eastPanel.setBackground(Color.BLACK);
-        eastPanel.add(bttnPanel);
+        JPanel southPanel = new JPanel();
+        southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        southPanel.add(bttnPanel);
 
         // scroll panel
         JScrollPane centerPanel = new JScrollPane(table);
@@ -197,7 +230,7 @@ public class StudentFacultyManagementGUI extends JFrame {
 
         mainPanel.add(northSrcPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
-        mainPanel.add(eastPanel, BorderLayout.SOUTH);
+        mainPanel.add(southPanel, BorderLayout.SOUTH);
         add(mainPanel); // objects container
 
     }
@@ -205,15 +238,25 @@ public class StudentFacultyManagementGUI extends JFrame {
     /* ---- Buttons Actions ---- */
 
     /* -- Search -- */
-    public void searchTable(String theName) {
+    public void searchTable(String theName, JComboBox<String> classFilter) {
         if (entity == 's') {
             try {
                 List<Students> students = null;
 
                 if (theName != null && theName.trim().length() > 0) {
-                    students = stDAO.searchStudents(theName);
+                    // filtering students
+                    if (classFilter.getSelectedIndex() != 0) {
+                        students = stDAO.searchStudentsByNameAndClass(theName, (String) classFilter.getSelectedItem());
+                    } else {
+                        students = stDAO.searchStudents(theName);
+                    }
                 } else {
-                    students = stDAO.getAllStudents();
+                    // filtering students
+                    if (classFilter.getSelectedIndex() != 0) {
+                        students = stDAO.searchStudentsByClass((String) classFilter.getSelectedItem());
+                    } else {
+                        students = stDAO.getAllStudents();
+                    }
                 }
 
                 // create model and update table
